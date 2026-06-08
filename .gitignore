@@ -9,3 +9,10 @@
 .npmrc
 
 .DS_Store
+
+# Environment variables (may contain API credentials)
+.env
+.env.local
+.env.*.local
+
+# Local development folder
