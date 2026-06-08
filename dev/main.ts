@@ -5,6 +5,7 @@ import type { DataLoader, DataLoaderGetBarsParams, DataLoaderSubscribeBarParams,
 import type { KLineData } from '../src/common/Data'
 import { styles } from './config'
 import { getAccessToken, getRefreshToken, storeTokens } from './auth-constants'
+import { setupZoomAnchorKeyBindings } from './tv-compact'
 
 declare const TradiumDatafeed: any
 
@@ -142,16 +143,8 @@ const dataLoader: DataLoader = {
 let chart: ReturnType<typeof init> = null
 
 function createChart (): void {
-  chart = init('chart',{
-    // zoomAnchor:'last_bar',
-    // zoomEnabled: true,
-    // panEnabled: true,
-    // crosshairEnabled: true,
-    // crosshairColor: 'rgba(255, 255, 255, 0.5)',
-    // crosshairWidth: 1,
-    // crosshairStyle: 'solid',
-    // crosshairType: 'vertical',
-    // crosshairLineWidth: 1,
+  chart = init('chart', {
+    zoomAnchor: 'last_bar'
   })
 
   if (chart === null) return
@@ -240,12 +233,17 @@ periodSelect.addEventListener('change', () => {
 // Init
 createChart()
 
+// Setup TV-compact zoom anchor key bindings
+let cleanupZoomAnchor = setupZoomAnchorKeyBindings(chart)
+
 // HMR
 if (import.meta.hot) {
   import.meta.hot.accept(() => {
+    cleanupZoomAnchor()
     dispose('chart')
     document.getElementById('chart')!.removeAttribute('k-line-chart-id')
     document.getElementById('chart')!.innerHTML = ''
     createChart()
+    cleanupZoomAnchor = setupZoomAnchorKeyBindings(chart)
   })
 }
