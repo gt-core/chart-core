@@ -142,7 +142,17 @@ const dataLoader: DataLoader = {
 let chart: ReturnType<typeof init> = null
 
 function createChart (): void {
-  chart = init('chart')
+  chart = init('chart',{
+    // zoomAnchor:'last_bar',
+    // zoomEnabled: true,
+    // panEnabled: true,
+    // crosshairEnabled: true,
+    // crosshairColor: 'rgba(255, 255, 255, 0.5)',
+    // crosshairWidth: 1,
+    // crosshairStyle: 'solid',
+    // crosshairType: 'vertical',
+    // crosshairLineWidth: 1,
+  })
 
   if (chart === null) return
   chart.setDataLoader(dataLoader)
