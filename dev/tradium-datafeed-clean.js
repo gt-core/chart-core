@@ -205,12 +205,49 @@
     if (this.connectionState === 'connected') this._sendUnsubscribe([ticker], [resolution]);
   };
 
+  TradiumDatafeed.prototype._buildWsUrl = function () {
+    if (!this.wsUrl) return null;
+
+    var token = this.getAccessToken();
+    var userId = this.connectionUserId ? encodeURIComponent(this.connectionUserId) : '';
+    var groupId = this.connectionGroupId ? encodeURIComponent(this.connectionGroupId) : '';
+
+    try {
+      var parsed = new URL(this.wsUrl);
+      var segments = parsed.pathname.split('/').filter(Boolean);
+      if (userId && segments[segments.length - 2] !== userId && segments[segments.length - 1] !== userId) {
+        segments.push(userId);
+      }
+      if (groupId && segments[segments.length - 1] !== groupId) {
+        segments.push(groupId);
+      }
+      parsed.pathname = '/' + segments.join('/');
+      if (token) parsed.searchParams.set('token', token);
+      return parsed.toString();
+    } catch (_e) {
+      var url = this.wsUrl.replace(/\/+$/, '');
+      if (userId && url.slice(-(userId.length + 1)) !== '/' + userId) {
+        url += '/' + userId;
+      }
+      if (groupId && url.slice(-(groupId.length + 1)) !== '/' + groupId) {
+        url += '/' + groupId;
+      }
+      if (token) {
+        url += (url.indexOf('?') === -1 ? '?' : '&') + 'token=' + encodeURIComponent(token);
+      }
+      return url;
+    }
+  };
+
   TradiumDatafeed.prototype.connect = function () {
-    if (!this.wsUrl || this.connectionState !== 'disconnected') return;
+    if (this.connectionState !== 'disconnected') return;
     this.isActive = true;
     this.connectionState = 'connecting';
-    var token = this.getAccessToken();
-    var url = this.wsUrl + (token ? ((this.wsUrl.indexOf('?') === -1 ? '?' : '&') + 'token=' + encodeURIComponent(token)) : '');
+    var url = this._buildWsUrl();
+    if (!url) {
+      this.connectionState = 'disconnected';
+      return;
+    }
     var self = this;
     var socket = new WebSocket(url);
     this.ws = socket;
