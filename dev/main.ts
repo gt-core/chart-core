@@ -125,7 +125,7 @@ function createDataFeed () {
     getAccessToken: resolveAccessToken,
     onRefreshToken: refreshAccessToken,
     debug: true,
-    barsPerRequest: 500,
+    barsPerRequest: 20,
     onAuthFailure: (info: any) => console.warn('[Auth] Failure:', info)
   })
 }
@@ -157,7 +157,7 @@ function createDataLoader (feed: any): DataLoader {
 
       feed.getHistoryKLineData(params.symbol, feedPeriod, from, to)
         .then((bars: KLineData[]) => {
-          const more = params.type === 'init' ? { forward: bars.length > 0 } : false
+          const more = { forward: bars.length > 0 }
           params.callback(bars, more)
         })
         .catch((err: any) => {
