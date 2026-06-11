@@ -11,6 +11,9 @@ import type { DataLoader, DataLoaderGetBarsParams, DataLoaderSubscribeBarParams,
 import type { KLineData } from '../src/common/Data'
 
 import { styles } from './config'
+
+// Register all custom indicators
+import './indicators'
 import { getAccessToken, getRefreshToken, storeTokens } from './auth-constants'
 import { setupTVCompact, setSymbolMetadata, type TVCompactInstance } from './tv-compact'
 
@@ -125,7 +128,7 @@ function createDataFeed () {
     getAccessToken: resolveAccessToken,
     onRefreshToken: refreshAccessToken,
     debug: true,
-    barsPerRequest: 20,
+    barsPerRequest: 300,
     onAuthFailure: (info: any) => console.warn('[Auth] Failure:', info)
   })
 }
@@ -204,6 +207,8 @@ async function createChartApp (): Promise<ChartApp | null> {
   })
   if (!chart) return null
 
+  window.kline = chart;
+
   chart.overrideXAxis({
     createTicks: ({ bounding, defaultTicks }) => {
       if (defaultTicks.length < 2) return defaultTicks
@@ -247,6 +252,15 @@ async function createChartApp (): Promise<ChartApp | null> {
   await tvCompact.onSymbolChange(DEFAULT_SYMBOL.ticker)
   chart.setSymbol(DEFAULT_SYMBOL)
   chart.setPeriod(DEFAULT_PERIOD)
+
+  // Add custom spread highlight indicator (highlights bars with spread > 10)
+  // chart.createIndicator('SPREAD_HIGHLIGHT', { pane: 'candle_pane' })
+
+  // Add Bollinger Bands indicator
+  // chart.createIndicator('BOLLINGER_BAND', { pane: {id: 'candle_pane'} })
+
+  // Add Pivot Point Standard indicator (pivot back 5)
+  // chart.createIndicator('PIVOT_POINT', { pane: {id: 'candle_pane'} })
 
   return {
     chart,
