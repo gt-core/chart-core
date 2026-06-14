@@ -16,12 +16,11 @@ import { styles } from './config'
 import './indicators'
 import { getAccessToken, getRefreshToken, storeTokens } from './auth-constants'
 import { setupTVCompact, setSymbolMetadata, type TVCompactInstance } from './tv-compact'
+import TradiumDatafeed from 'tradium-datafeed'
 
 // ============================================================================
 // Environment Configuration
 // ============================================================================
-
-declare const TradiumDatafeed: any
 
 const ENV = {
   MARKET_DATA_URL: import.meta.env.VITE_MARKET_DATA_BASE_URL || 'https://cug-market-data.tradesea.ai/v1',
