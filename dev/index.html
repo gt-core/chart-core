@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KLineChart Dev</title>
+  <link rel="stylesheet" href="./style.css">
+  <!-- TradiumDatafeed is now imported as a module in main.ts (tradium-datafeed pkg) -->
+</head>
+<body>
+  <div id="header">
+    <h1>KLineChart Dev</h1>
+    <span>Hot-reload playground &mdash; edit src/ and see changes live</span>
+    <select id="period-select">
+      <option value="1">1m</option>
+      <option value="5">5m</option>
+      <option value="15">15m</option>
+      <option value="60">1h</option>
+      <option value="240">4h</option>
+      <option value="1D" selected>1D</option>
+      <option value="1W">1W</option>
+      <option value="1M">1M</option>
+    </select>
+    <div id="symbol-search">
+      <input id="symbol-input" type="text" placeholder="Search symbol (e.g. AAPL)" autocomplete="off" />
+      <div id="symbol-results"></div>
+    </div>
+  </div>
+  <div id="chart"></div>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

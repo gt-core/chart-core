@@ -8,9 +8,4 @@
 
 .npmrc
 
-<<<<<<< HEAD
 .DS_Store
-=======
-.DS_Store
-/dev
->>>>>>> 955bb8cb (feat: update package and gitignore)

@@ -29,7 +29,7 @@ const hotkeys: Record<string, HotkeyTemplate> = {
 }
 
 function registerHotkey<E = unknown> (hotkey: HotkeyTemplate<E>): void {
-  hotkeys[hotkey.name] = hotkey as HotkeyTemplate
+  hotkeys[hotkey.name] = hotkey
 }
 
 function getHotkey (name: string): Nullable<HotkeyTemplate> {
